@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import moment from 'moment'
 import { Button, Row, Col } from 'react-bootstrap'
 import GoodsList from './../GoodsList'
+import _ from 'lodash'
 import { getGoodsList, setGoodList } from './../utils'
 import style from './style.css'
 
@@ -10,6 +11,7 @@ class BasketForm extends Component {
     super(props)
     this.state = {
       goodsList: getGoodsList(localStorage),
+      ascendingSorted: true,
       name: '',
       price: '',
       count: 1,
@@ -53,10 +55,22 @@ class BasketForm extends Component {
     this.setGoodListAndState(newGoodsList)
   }
   
+  sortTable = () => {
+    const { goodsList, ascendingSorted } = this.state
+    let sortedGoodsList
+    if(ascendingSorted) {
+      sortedGoodsList = goodsList.reverse()
+    } else {
+      sortedGoodsList = _.sortBy(goodsList, 'id')
+    }
+    this.setGoodListAndState(sortedGoodsList)
+    this.setState({ ascendingSorted: !ascendingSorted })
+  }
+  
  render() {
     const {
-      state: {name, price, count, goodsList},
-      update, saveData, deleteAllGoods, deleteGoods
+      state: {name, price, count, goodsList, ascendingSorted },
+      update, saveData, deleteAllGoods, deleteGoods, sortTable
     } = this
  
    return(
@@ -98,6 +112,8 @@ class BasketForm extends Component {
        goodsList={goodsList}
        deleteAllGoods={deleteAllGoods}
        deleteGoods={deleteGoods}
+       ascendingSorted={ascendingSorted}
+       sortTable={sortTable}
      />
      </Col>
    </Row>

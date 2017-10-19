@@ -5,7 +5,7 @@ import _ from 'lodash'
 import PropTypes from 'prop-types'
 import style from './style.css'
 
-const GoodsList = ({ goodsList, deleteAllGoods, deleteGoods }) => {
+const GoodsList = ({ goodsList, deleteAllGoods, deleteGoods, sortTable, ascendingSorted }) => {
   const shownTable = goodsList.length > 0
   const dateToFormat = value => moment(value).format('YYYY-MM-DD, HH:mm:ss')
   
@@ -16,7 +16,13 @@ const GoodsList = ({ goodsList, deleteAllGoods, deleteGoods }) => {
         <tbody>
           <tr className="trStyle">
             <th>#</th>
-            <th>Created Time</th>
+            <th
+              onClick={sortTable}
+              className="sortTh"
+            >
+              Created Time
+              <i className={`fa fa-chevron-${ascendingSorted ? 'down' : 'up'}`} aria-hidden="true" />
+            </th>
             <th>Name</th>
             <th>Price</th>
             <th>Count</th>
@@ -48,6 +54,8 @@ GoodsList.propTypes = {
   goodsList: PropTypes.arrayOf(PropTypes.shape()),
   deleteAllGoods: PropTypes.func.isRequired,
   deleteGoods: PropTypes.func.isRequired,
+  sortTable: PropTypes.func.isRequired,
+  ascendingSorted: PropTypes.bool.isRequired,
 }
 
 export default GoodsList

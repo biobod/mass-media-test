@@ -9,3 +9,10 @@
 .tableWrapper {
     padding: 40px;
 }
+.sortTh:hover{
+    cursor: pointer;
+    color: #75a3a3;
+}
+.sortTh > i {
+    margin-left: 5px;
+}
