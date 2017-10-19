@@ -1,18 +1,20 @@
 import React from 'react'
-import { Button } from 'react-bootstrap'
+import { Button, Table } from 'react-bootstrap'
+import moment from 'moment'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
+import style from './style.css'
 
-const GoodsList = ({ goodsList }) => {
-  const deleteAllGoods = () => {
-    localStorage.clear()
-  }
+const GoodsList = ({ goodsList, deleteAllGoods }) => {
+  const dateToFormat = value => moment(value).format('YYYY-MM-DD, HH:mm:ss')
   return(
-    <div>
-      {goodsList.length > 0 && <table>
+    <div className="tableWrapper">
+      {goodsList.length > 0 &&
+      <Table striped bordered condensed hover>
         <tbody>
-        <tr>
+        <tr className="trStyle">
           <th>#</th>
+          <th>Created Time</th>
           <th>name</th>
           <th>price</th>
           <th>count</th>
@@ -21,6 +23,7 @@ const GoodsList = ({ goodsList }) => {
           return (
             <tr key={index}>
               <td>{index}</td>
+              <td>{dateToFormat(obj.id)}</td>
               <td>{obj.name}</td>
               <td>{obj.price}</td>
               <td>{obj.count}</td>
@@ -28,13 +31,14 @@ const GoodsList = ({ goodsList }) => {
           )
         })}
         </tbody>
-      </table>}
+      </Table>}
       <Button onClick={deleteAllGoods}>Delete All Goods</Button>
     </div>
   )
 }
 GoodsList.propTypes = {
   goodsList: PropTypes.arrayOf(PropTypes.shape()),
+  deleteAllGoods: PropTypes.func.isRequired,
 }
 
 

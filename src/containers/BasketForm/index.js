@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import moment from 'moment'
-import { Button } from 'react-bootstrap'
+import { Button, Row, Col } from 'react-bootstrap'
 import GoodsList from './../GoodsList'
 import { getGoodsList } from './../utils'
+import style from './style.css'
 
 class BasketForm extends Component {
   constructor(props) {
@@ -39,17 +40,22 @@ class BasketForm extends Component {
     localStorage.setItem('goods', serialObj)
     this.setState({ goodsList: getGoodsList(localStorage) })
   }
+  deleteAllGoods = () => {
+    localStorage.clear()
+    this.setState({ goodsList: [] })
+  }
   
  render() {
     const {
       state: {name, price, count, goodsList},
-      update, saveData,
+      update, saveData, deleteAllGoods,
     } = this
  
    return(
-   <div>
+   <Row>
+     <Col md={12}>
      <form id="submitForm" onSubmit={saveData}>
-       <div>
+       <div className="formBody">
          <input
            required
            onChange={update('name')}
@@ -58,6 +64,7 @@ class BasketForm extends Component {
          />
          <input
            placeholder="price"
+           type="number"
            required
            value={price}
            onChange={update('price')}
@@ -69,14 +76,15 @@ class BasketForm extends Component {
            type="number"
            onChange={update('count')}
          />
-         <Button
-           type="submit"
-         >Add to Basket
+         <Button type="submit">
+           Add to Basket
+           <i className="fa fa-shopping-basket" aria-hidden="true" />
          </Button>
        </div>
      </form>
-     <GoodsList goodsList={goodsList} />
-   </div>
+     <GoodsList goodsList={goodsList} deleteAllGoods={deleteAllGoods} />
+     </Col>
+   </Row>
      )
    }
    }

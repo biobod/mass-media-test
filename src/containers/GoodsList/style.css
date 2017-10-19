@@ -1,0 +1,11 @@
+.trStyle {
+    background-color: #bfbfbf!important;
+}
+.trStyle > th {
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.tableWrapper {
+    padding: 40px;
+}
