@@ -5,5 +5,10 @@ const getGoodsList = storage => {
   }
   return localStorage.goodsList
 }
+const setGoodList = newGoodsList => {
+  const newObj = { goodsList: newGoodsList }
+  const serialObj = JSON.stringify(newObj)
+  localStorage.setItem('goods', serialObj)
+}
 
-export { getGoodsList }
+export { getGoodsList, setGoodList }

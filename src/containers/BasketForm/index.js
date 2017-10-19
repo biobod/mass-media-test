@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import moment from 'moment'
 import { Button, Row, Col } from 'react-bootstrap'
 import GoodsList from './../GoodsList'
-import { getGoodsList } from './../utils'
+import { getGoodsList, setGoodList } from './../utils'
 import style from './style.css'
 
 class BasketForm extends Component {
@@ -34,21 +34,26 @@ class BasketForm extends Component {
     const id = moment().toISOString()
     
     goodsList.push(Object.assign({}, { id }, { name, price, count }))
-    
-    const newObj = { goodsList: goodsList }
-    const serialObj = JSON.stringify(newObj)
-    localStorage.setItem('goods', serialObj)
+    setGoodList(goodsList)
     this.setState({ goodsList: getGoodsList(localStorage) })
   }
+  
   deleteAllGoods = () => {
     localStorage.clear()
     this.setState({ goodsList: [] })
   }
   
+  deleteGoods = value => {
+    const { goodsList } = this.state
+    const newGoodsList = goodsList.filter(obj => obj.id !== value)
+    setGoodList(newGoodsList)
+    this.setState({ goodsList: getGoodsList(localStorage) })
+  }
+  
  render() {
     const {
       state: {name, price, count, goodsList},
-      update, saveData, deleteAllGoods,
+      update, saveData, deleteAllGoods, deleteGoods
     } = this
  
    return(
@@ -82,12 +87,16 @@ class BasketForm extends Component {
          </Button>
        </div>
      </form>
-     <GoodsList goodsList={goodsList} deleteAllGoods={deleteAllGoods} />
+     <GoodsList
+       goodsList={goodsList}
+       deleteAllGoods={deleteAllGoods}
+       deleteGoods={deleteGoods}
+     />
      </Col>
    </Row>
-     )
-   }
-   }
+   )
+ }
+}
    
 
 
