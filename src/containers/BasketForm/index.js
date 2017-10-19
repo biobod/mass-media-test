@@ -25,6 +25,11 @@ class BasketForm extends Component {
     this.setState(state)
   }
   
+  setGoodListAndState = newGoodsList => {
+    setGoodList(newGoodsList)
+    this.setState({ goodsList: getGoodsList(localStorage) })
+  }
+  
   saveData = e => {
     if (e) {
       e.preventDefault()
@@ -34,8 +39,7 @@ class BasketForm extends Component {
     const id = moment().toISOString()
     
     goodsList.push(Object.assign({}, { id }, { name, price, count }))
-    setGoodList(goodsList)
-    this.setState({ goodsList: getGoodsList(localStorage) })
+    this.setGoodListAndState(goodsList)
   }
   
   deleteAllGoods = () => {
@@ -46,8 +50,7 @@ class BasketForm extends Component {
   deleteGoods = value => {
     const { goodsList } = this.state
     const newGoodsList = goodsList.filter(obj => obj.id !== value)
-    setGoodList(newGoodsList)
-    this.setState({ goodsList: getGoodsList(localStorage) })
+    this.setGoodListAndState(newGoodsList)
   }
   
  render() {
@@ -87,6 +90,10 @@ class BasketForm extends Component {
          </Button>
        </div>
      </form>
+       {/*
+       It's not good solution -> to include GoodsList in this component. They are should be separate components.
+        But I don't want to connect redux for this small form,  so I decide to leave them
+       */}
      <GoodsList
        goodsList={goodsList}
        deleteAllGoods={deleteAllGoods}
