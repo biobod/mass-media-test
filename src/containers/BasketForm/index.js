@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
 import moment from 'moment'
-import PropTypes from 'prop-types'
+import { Button } from 'react-bootstrap'
+import GoodsList from './../GoodsList'
+import { getGoodsList } from './../utils'
 
 class BasketForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      goodsList: getGoodsList(localStorage),
       name: '',
       price: '',
       count: 1,
@@ -25,29 +28,22 @@ class BasketForm extends Component {
     if (e) {
       e.preventDefault()
     }
-    const returnObj = JSON.parse(localStorage.getItem('goods')) || {}
-    const oldArray = returnObj.arr ? returnObj.arr.slice() : []
+    const { name, price, count } = this.state
+    const goodsList = getGoodsList(localStorage)
     const id = moment().toISOString()
-    oldArray.push(Object.assign({}, {id}, this.state))
-    const newObj = {
-      arr: oldArray
-    }
+    
+    goodsList.push(Object.assign({}, { id }, { name, price, count }))
+    
+    const newObj = { goodsList: goodsList }
     const serialObj = JSON.stringify(newObj)
     localStorage.setItem('goods', serialObj)
-
+    this.setState({ goodsList: getGoodsList(localStorage) })
   }
-  getStorage = () => {
-    console.log(localStorage)
-  }
-  deleteAllGoods = () => {
-    localStorage.clear()
-  }
-  
   
  render() {
     const {
-      state: {name, price, count},
-      update, saveData, getStorage, deleteAllGoods
+      state: {name, price, count, goodsList},
+      update, saveData,
     } = this
  
    return(
@@ -73,15 +69,13 @@ class BasketForm extends Component {
            type="number"
            onChange={update('count')}
          />
-         <button
+         <Button
            type="submit"
          >Add to Basket
-         </button>
+         </Button>
        </div>
      </form>
-     <button onClick={getStorage}>get storage</button>
-     <button onClick={deleteAllGoods}>Delete All Goods</button>
-     
+     <GoodsList goodsList={goodsList} />
    </div>
      )
    }
